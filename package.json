@@ -1,5 +1,5 @@
 {
-  "name": "browser-module",
+  "name": "amdjs",
   "version": "0.0.1",
   "description": "Sample code to write JS module loader complies AMD",
   "main": "bundle.js",
