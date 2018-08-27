@@ -1,3 +1,8 @@
+/**
+ * @author Liu Chaofan
+ * @license MIT
+ */
+
 const { EventEmitter } = require('events');
 const { inherits } = require('util');
 

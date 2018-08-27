@@ -1,6 +1,6 @@
 {
   "name": "browser-module",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Sample code to write JS module loader complies AMD",
   "main": "bundle.js",
   "scripts": {
@@ -12,9 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/lcfme/browser-module.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["js", "module", "amd", "loader"],
+  "author": "Liu Chaofan",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/lcfme/browser-module/issues"
   },
