@@ -4,6 +4,7 @@ function Mod(loadjs, id) {
     this.id = id;
     this.path = loadjs._urlUtil.fixUrl(id);
     this.shim = undefined;
+    this.hasRequested = false;
     this.hasExecutedCb = false;
     this.exports = {};
     this.status = Mod.status.pending;
@@ -13,7 +14,8 @@ function Mod(loadjs, id) {
             this.path = loadjs._urlUtil.fixUrl(uniqModule.path);
         if (uniqModule.shim) this.shim = uniqModule.shim;
     }
-
+    var mod = loadjs._rootMod.loadMod(this.path);
+    if (mod) return mod;
     this._loadjs.emit(this._loadjs.EVENT.REGISTER_MOD, this);
 }
 
@@ -35,12 +37,9 @@ Mod.prototype.initMod = function(deps, cbFn) {
         }
     });
     this.deps.forEach(function(dep, index) {
-        var mod = self._loadjs._rootMod.loadMod(dep);
-        if (!mod) {
-            mod = new Mod(self._loadjs, dep);
-            mod.request();
-            self.depsObj.push(mod);
-        }
+        var mod = new Mod(self._loadjs, dep);
+        mod.request();
+        self.depsObj.push(mod);
     });
     this.checkDepsLoaded(cbFn);
 };
@@ -72,6 +71,8 @@ Mod.prototype.checkDepsLoaded = function(cbFn) {
 };
 
 Mod.prototype.request = function() {
+    if (this.hasRequested) return;
+    this.hasRequested = true;
     var self = this;
     var scriptElem = document.createElement('script');
     scriptElem.onload = function(e) {

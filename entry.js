@@ -6,11 +6,10 @@ loadjs.config({
             shim: 'jQuery'
         },
         test: {
-            path: 'test.js',
-            rename: true
+            path: 'test.js'
         }
     }
 });
-loadjs(['jquery', 'test'], function($, a) {
+loadjs(['test'], function($, a) {
     console.log('ok', $, a);
 });

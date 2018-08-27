@@ -10,9 +10,9 @@ function RootMod(loadjs) {
     });
 }
 
-RootMod.prototype.loadMod = function(id) {
-    if (this.mods[id]) {
-        return this.mods[id];
+RootMod.prototype.loadMod = function(path) {
+    if (this.mods[path]) {
+        return this.mods[path];
     }
     return undefined;
 };
