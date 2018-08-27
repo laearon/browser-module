@@ -21,12 +21,12 @@ Loadjs.prototype.require = function(id, deps, cbFn) {
     if (typeof id === 'function') {
         cbFn = id;
         deps = [];
-        id = document.currentScript.src || './';
+        id = document.currentScript.src;
     }
     if (typeof deps === 'function') {
         cbFn = deps;
         deps = id;
-        id = document.currentScript.src || './';
+        id = document.currentScript.src;
     }
 
     if (typeof deps === 'string') {

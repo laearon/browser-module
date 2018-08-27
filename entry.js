@@ -1,7 +1,12 @@
 loadjs.config({
-    baseUrl: '/'
+    baseUrl: '/',
+    module: {
+        jquery: {
+            path: 'https://code.jquery.com/jquery-3.3.1.min.js',
+            shim: 'jQuery'
+        }
+    }
 });
-loadjs(['test.js'], function(test) {
-    debugger;
-    console.log('ok', test);
+loadjs(['jquery'], function($) {
+    console.log('ok', $);
 });
