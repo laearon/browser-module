@@ -38,10 +38,6 @@ Loadjs.prototype.require = function(id, deps, cbFn) {
         deps = [deps];
     }
 
-    if (!/\.js$/.test(id)) {
-        id = id + '.js';
-    }
-
     var mod = this._rootMod.loadMod(id);
     if (!mod) {
         mod = new Mod(this, id);

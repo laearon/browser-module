@@ -3,10 +3,10 @@ function RootMod(loadjs) {
     this._loadjs = loadjs;
     this.mods = {};
     loadjs.on(loadjs.EVENT.REGISTER_MOD, function(mod) {
-        self.mods[mod.id] = mod;
+        self.mods[mod.path] = mod;
     });
     loadjs.on(loadjs.EVENT.MOD_LOADED, function(mod) {
-        self.mods[mod.id] = mod;
+        self.mods[mod.path] = mod;
     });
 }
 
