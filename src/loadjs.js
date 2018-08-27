@@ -23,15 +23,20 @@ function Loadjs() {
 inherits(Loadjs, EventEmitter);
 
 Loadjs.prototype.require = function(id, deps, cbFn) {
+    var currentScriptSrc = document.currentScript
+        ? document.currentScript.src
+        : Math.random()
+              .toString(32)
+              .substr(2);
     if (typeof id === 'function') {
         cbFn = id;
         deps = [];
-        id = document.currentScript.src;
+        id = currentScriptSrc;
     }
     if (typeof deps === 'function') {
         cbFn = deps;
         deps = id;
-        id = document.currentScript.src;
+        id = currentScriptSrc;
     }
 
     if (typeof deps === 'string') {
