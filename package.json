@@ -1,10 +1,10 @@
 {
   "name": "browser-module",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Sample code to write JS module loader complies AMD",
+  "main": "bundle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"no test found\"",
     "build": "browserify -r ./src/loadjs.js -t [ babelify ] -s loadjs -d > ./bundle.js",
     "start": "node scripts/dev.js"
   },
