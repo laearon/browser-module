@@ -41,7 +41,7 @@ Mod.prototype.initMod = function(deps, cbFn) {
         mod.request();
         self.depsObj.push(mod);
     });
-    this.checkDepsLoaded(cbFn);
+    if (this.depsObj.length) this.checkDepsLoaded(cbFn);
 };
 
 Mod.prototype.checkDepsLoaded = function(cbFn) {
