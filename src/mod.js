@@ -6,6 +6,7 @@ function Mod(loadjs, id) {
     this.shim = undefined;
     this.hasRequested = false;
     this.hasExecutedCb = false;
+    this.hasInited = false;
     this.exports = {};
     this.status = Mod.status.pending;
     var uniqModule = loadjs._config.module[id];
@@ -20,6 +21,8 @@ function Mod(loadjs, id) {
 }
 
 Mod.prototype.initMod = function(deps, cbFn) {
+    if (this.hasInited) return;
+    this.hasInited = true;
     var self = this;
     var loadjs = this._loadjs;
     this.status = Mod.status.resolved;
@@ -41,7 +44,7 @@ Mod.prototype.initMod = function(deps, cbFn) {
         mod.request();
         self.depsObj.push(mod);
     });
-    if (this.depsObj.length) this.checkDepsLoaded(cbFn);
+    if (!this.depsObj.length) this.checkDepsLoaded(cbFn);
 };
 
 Mod.prototype.checkDepsLoaded = function(cbFn) {

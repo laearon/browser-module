@@ -42,17 +42,15 @@ Loadjs.prototype.require = function(id, deps, cbFn) {
     if (typeof deps === 'string') {
         deps = [deps];
     }
-
-    var mod = this._rootMod.loadMod(id);
-    if (!mod) {
-        mod = new Mod(this, id);
-    }
+    var mod = new Mod(this, id);
     mod.initMod(deps, cbFn);
+    return mod;
 };
 
 Loadjs.prototype.config = function(config) {
     this._config.baseUrl = config.baseUrl || this._config.baseUrl;
     this._config.module = Object.assign(this._config.module, config.module);
+    return this;
 };
 
 Loadjs.EVENT = {

@@ -10,6 +10,6 @@ loadjs.config({
         }
     }
 });
-loadjs(['jquery', 'test'], function($) {
-    console.log('ok', $, a);
+loadjs(['jquery', 'test'], function($, test) {
+    console.log('ok', $, test);
 });
