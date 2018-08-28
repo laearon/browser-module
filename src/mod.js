@@ -45,6 +45,7 @@ Mod.prototype.initMod = function(deps, cbFn) {
         self.depsObj.push(mod);
     });
     if (!this.depsObj.length) this.checkDepsLoaded(cbFn);
+    return this;
 };
 
 Mod.prototype.checkDepsLoaded = function(cbFn) {
@@ -90,7 +91,9 @@ Mod.prototype.request = function() {
     };
     scriptElem.onerror = function(e) {};
     scriptElem.src = this.path;
+    scriptElem.setAttribute('crossorigin', 'anonymous');
     document.body.appendChild(scriptElem);
+    return this;
 };
 
 Mod.status = {

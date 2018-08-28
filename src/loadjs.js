@@ -68,10 +68,12 @@ module.exports = function(id, deps, cbFn) {
     return loadjs.require(id, deps, cbFn);
 };
 
-module.exports.config = function(config) {
+exports = module.exports;
+
+exports.config = function(config) {
     return loadjs.config(config);
 };
 
-module.exports.getSelf = function() {
+exports.getSelf = function() {
     return loadjs;
 };
