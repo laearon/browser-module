@@ -28,6 +28,10 @@ Loadjs.prototype.require = function(id, deps, cbFn) {
         : Math.random()
               .toString(32)
               .substr(2);
+    var exact = false;
+    if (typeof id === 'string' && typeof cbFn === 'function') {
+        exact = true;
+    }
     if (typeof id === 'function') {
         cbFn = id;
         deps = [];
@@ -42,7 +46,10 @@ Loadjs.prototype.require = function(id, deps, cbFn) {
     if (typeof deps === 'string') {
         deps = [deps];
     }
-    var mod = new Mod(this, id);
+    if (!deps) {
+        deps = [];
+    }
+    var mod = new Mod(this, id, exact);
     mod.initMod(deps, cbFn);
     return mod;
 };
@@ -58,6 +65,9 @@ Loadjs.EVENT = {
         .toString(32)
         .substr(2),
     REGISTER_MOD: Math.random()
+        .toString(32)
+        .substr(2),
+    MOD_REQUESTED: Math.random()
         .toString(32)
         .substr(2)
 };

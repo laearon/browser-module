@@ -1,33 +1,68 @@
-function Mod(loadjs, id) {
+function Mod(loadjs, id, exact) {
     this.id = id;
     this.path = loadjs._urlUtil.fixUrl(id);
-    var mod = loadjs._rootMod.loadMod(this.path);
-    if (mod) return mod;
-    this.STATUS = Mod.status;
-    this._loadjs = loadjs;
     this.shim = undefined;
-    this.hasRequested = false;
-    this.hasExecutedCb = false;
-    this.hasInited = false;
-    this.exports = {};
-    this.status = Mod.status.pending;
+    this.deps = [];
+    this.depsObj = [];
     var uniqModule = loadjs._config.module[id];
     if (uniqModule) {
         if (uniqModule.path)
             this.path = loadjs._urlUtil.fixUrl(uniqModule.path);
         if (uniqModule.shim) this.shim = uniqModule.shim;
+        if (uniqModule.exact) exact = true;
+        if (uniqModule.deps)
+            this.deps = [].concat(
+                typeof uniqModule.deps === 'string'
+                    ? [uniqModule.deps]
+                    : uniqModule.deps
+            );
     }
+    this._id = exact ? id : this.path;
+    var mod = loadjs._rootMod.loadMod(this._id);
+    if (mod) return mod;
+    this.STATUS = Mod.status;
+    this._loadjs = loadjs;
+    this.hasRequested = false;
+    this.hasExecutedCb = false;
+    this.hasInited = false;
+    this.exports = {};
+    this.status = Mod.status.pending;
     this._loadjs.emit(this._loadjs.EVENT.REGISTER_MOD, this);
+    var self = this;
+    if (this.shim) {
+        if (this.deps.length) {
+            loadjs.on(loadjs.EVENT.MOD_LOADED, function(mod) {
+                var flag = false;
+                self.deps.forEach(function(dep) {
+                    if (dep === mod.id) {
+                        flag = true;
+                    }
+                });
+                if (flag) {
+                    var hasloaded = self.hasAllDepsLoaded();
+                    if (hasloaded) {
+                        self.request();
+                    }
+                }
+            });
+            this.deps.forEach(function(dep, index) {
+                var mod = new Mod(self._loadjs, dep);
+                self.depsObj.push(mod);
+            });
+        } else {
+            self.request();
+        }
+    }
 }
 
 Mod.prototype.initMod = function(deps, cbFn) {
     if (this.hasInited) return;
+    deps = deps || [];
     this.hasInited = true;
     var self = this;
     var loadjs = this._loadjs;
     this.status = Mod.status.resolved;
-    this.deps = deps;
-    this.depsObj = [];
+    this.deps = [].concat(deps);
     loadjs.on(loadjs.EVENT.MOD_LOADED, function(mod) {
         var flag = false;
         self.deps.forEach(function(dep) {
@@ -41,14 +76,16 @@ Mod.prototype.initMod = function(deps, cbFn) {
     });
     this.deps.forEach(function(dep, index) {
         var mod = new Mod(self._loadjs, dep);
-        mod.request();
+        if (!mod.shim) {
+            mod.request();
+        }
         self.depsObj.push(mod);
     });
     if (!this.depsObj.length) this.checkDepsLoaded(cbFn);
     return this;
 };
 
-Mod.prototype.checkDepsLoaded = function(cbFn) {
+Mod.prototype.hasAllDepsLoaded = function() {
     var self = this;
     var flag = true;
     var i, mod;
@@ -59,6 +96,11 @@ Mod.prototype.checkDepsLoaded = function(cbFn) {
             break;
         }
     }
+    return flag;
+};
+
+Mod.prototype.checkDepsLoaded = function(cbFn) {
+    var flag = this.hasAllDepsLoaded();
     if (flag && !this.hasExecutedCb) {
         this.status = Mod.status.loadedAllDeps;
         this.hasExecutedCb = true;
@@ -71,12 +113,13 @@ Mod.prototype.checkDepsLoaded = function(cbFn) {
             : {};
         this._loadjs.emit(this._loadjs.EVENT.MOD_LOADED, this);
     }
-    return flag;
 };
 
 Mod.prototype.request = function() {
-    if (this.hasRequested) return;
+    if (this.hasRequested || this._loadjs._rootMod.getModByReqCache(this.path))
+        return;
     this.hasRequested = true;
+    this._loadjs.emit(this._loadjs.EVENT.MOD_REQUESTED, this);
     var self = this;
     var scriptElem = document.createElement('script');
     scriptElem.onload = function(e) {

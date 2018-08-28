@@ -4,7 +4,7 @@
   "description": "Sample code to write JS module loader complies AMD",
   "main": "bundle.js",
   "scripts": {
-    "test": "echo \"no test found\"",
+    "test": "echo \"test examples are in test folder.\"",
     "build": "browserify -r ./src/loadjs.js -t [ babelify ] -s loadjs -d > ./bundle.js",
     "start": "node scripts/dev.js"
   },
