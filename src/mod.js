@@ -1,8 +1,10 @@
 function Mod(loadjs, id) {
-    this.STATUS = Mod.status;
-    this._loadjs = loadjs;
     this.id = id;
     this.path = loadjs._urlUtil.fixUrl(id);
+    var mod = loadjs._rootMod.loadMod(this.path);
+    if (mod) return mod;
+    this.STATUS = Mod.status;
+    this._loadjs = loadjs;
     this.shim = undefined;
     this.hasRequested = false;
     this.hasExecutedCb = false;
@@ -15,8 +17,6 @@ function Mod(loadjs, id) {
             this.path = loadjs._urlUtil.fixUrl(uniqModule.path);
         if (uniqModule.shim) this.shim = uniqModule.shim;
     }
-    var mod = loadjs._rootMod.loadMod(this.path);
-    if (mod) return mod;
     this._loadjs.emit(this._loadjs.EVENT.REGISTER_MOD, this);
 }
 
