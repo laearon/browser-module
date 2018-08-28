@@ -1,8 +1,10 @@
 # loadjs
 
-这个是一个微型的模块加载器，代码就是最好的文档。
+这个是一个微型的模块加载器，代码就是最好的文档。  
 
-用法
+具体示例可参考 test 文件夹下的测试用例，有高级用法如自定义 id 的模块，shim 模块，加入依赖其他模块的 shim 如 jquery 插件。  
+
+基本用法  
 
 ```javascript
 loadjs.config({
@@ -30,6 +32,3 @@ loadjs(['deps'], function() {
 });
 ```
 
-loadjs 默认用你写代码引入模块时的名字作为模块 ID，通过 urlFix 生成 path，用生成的 path 作为模块唯一索引，从模块字典中查找相应的模块。
-
-具体示例可参考 entry.js
