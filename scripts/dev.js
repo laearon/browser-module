@@ -17,7 +17,7 @@ gaze.on('all', function(event, filepath) {
 });
 
 function bundle() {
-    var cp = exec('npm run build');
+    var cp = exec('npm run dev');
     cp.stdout.pipe(process.stdout);
     cp.stderr.pipe(process.stdout);
 }
