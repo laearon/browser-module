@@ -1,4 +1,4 @@
-loadjs('jquery', function($) {
+amdjs('jquery', function($) {
     console.log(2, $, 'test2.js');
     return {
         script: 'test2.js'

@@ -1,4 +1,4 @@
-loadjs.config({
+amdjs.config({
     baseUrl: '/test/exam2/',
     module: {
         jquery: {
@@ -13,6 +13,6 @@ loadjs.config({
     }
 });
 
-loadjs(['bootstrap'], function($) {
+amdjs(['bootstrap'], function($) {
     console.log('ok', $);
 });

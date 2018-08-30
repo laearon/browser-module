@@ -1,4 +1,4 @@
-loadjs.config({
+amdjs.config({
     baseUrl: '/test/exam2/',
     module: {
         jquery: {
@@ -16,6 +16,6 @@ loadjs.config({
     }
 });
 
-loadjs(['test1', 'test2'], function(test1, test2) {
+amdjs(['test1', 'test2'], function(test1, test2) {
     console.log('ok', test1, test2);
 });

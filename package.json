@@ -1,12 +1,12 @@
 {
   "name": "amdjs",
-  "version": "0.0.15",
+  "version": "1.0.1",
   "description": "Sample code to write JS module loader complies AMD",
   "main": "bundle.js",
   "scripts": {
     "test": "echo \"test examples are in test folder.\"",
     "build": "browserify -r ./src/loadjs.js -t [ babelify ] -s amdjs | uglifyjs -c > ./amdjs.js",
-    "dev": "browserify -r ./src/loadjs.js -t [ babelify ] -s loadjs -d > ./bundle.js",
+    "dev": "browserify -r ./src/loadjs.js -t [ babelify ] -s amdjs -d > ./bundle.js",
     "start": "node scripts/dev.js"
   },
   "repository": {

@@ -1,4 +1,4 @@
-# loadjs
+# amdjs
 
 这个是一个微型的模块加载器，代码就是最好的文档。  
 
@@ -7,7 +7,7 @@
 基本用法  
 
 ```javascript
-loadjs.config({
+amdjs.config({
     baseUrl: '/',
     module: {
         jquery: {
@@ -17,15 +17,15 @@ loadjs.config({
     }
 });
 
-loadjs('jquery', function($) {
+amdjs('jquery', function($) {
     console.log($);
 });
 ```
 
-loadjs 也支持定义自己的模块
+amdjs 也支持定义自己的模块
 
 ```javascript
-loadjs(['deps'], function() {
+amdjs(['deps'], function() {
     return {
         // things you want to expose
     };
