@@ -1,6 +1,6 @@
 {
   "name": "amdjs",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Sample code to write JS module loader complies AMD",
   "main": "amdjs.js",
   "scripts": {

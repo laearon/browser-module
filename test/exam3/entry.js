@@ -1,5 +1,5 @@
 amdjs.config({
-    baseUrl: '/test/exam2/',
+    baseUrl: '/test/exam3/',
     module: {
         jquery: {
             path: 'https://code.jquery.com/jquery-3.3.1.min.js',

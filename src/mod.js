@@ -19,7 +19,12 @@ function Mod(loadjs, id, exact) {
     }
     this._id = exact ? id : this.path;
     var mod = loadjs._rootMod.loadMod(this._id);
-    if (mod) return mod;
+
+    if (mod) {
+        if (mod.status === Mod.status.loadedAllDeps)
+            mod._loadjs.emit(mod._loadjs.EVENT.MOD_LOADED, mod);
+        return mod;
+    }
     this.STATUS = Mod.status;
     this._loadjs = loadjs;
     this.hasRequested = false;
@@ -33,8 +38,8 @@ function Mod(loadjs, id, exact) {
         if (this.deps.length) {
             loadjs.on(loadjs.EVENT.MOD_LOADED, function(mod) {
                 var flag = false;
-                self.deps.forEach(function(dep) {
-                    if (dep === mod.id) {
+                self.depsObj.forEach(function(depObj) {
+                    if (depObj._id === mod._id) {
                         flag = true;
                     }
                 });
@@ -65,8 +70,8 @@ Mod.prototype.initMod = function(deps, cbFn) {
     this.deps = [].concat(deps);
     loadjs.on(loadjs.EVENT.MOD_LOADED, function(mod) {
         var flag = false;
-        self.deps.forEach(function(dep) {
-            if (dep === mod.id) {
+        self.depsObj.forEach(function(depObj) {
+            if (depObj._id === mod._id) {
                 flag = true;
             }
         });
@@ -100,7 +105,8 @@ Mod.prototype.hasAllDepsLoaded = function() {
 };
 
 Mod.prototype.checkDepsLoaded = function(cbFn) {
-    var flag = this.hasAllDepsLoaded();
+    var flag =
+        this.status === Mod.status.loadedAllDeps || this.hasAllDepsLoaded();
     if (flag && !this.hasExecutedCb) {
         this.status = Mod.status.loadedAllDeps;
         this.hasExecutedCb = true;
@@ -111,13 +117,13 @@ Mod.prototype.checkDepsLoaded = function(cbFn) {
                   })
               )
             : {};
-        this._loadjs.emit(this._loadjs.EVENT.MOD_LOADED, this);
     }
+    if (flag) this._loadjs.emit(this._loadjs.EVENT.MOD_LOADED, this);
 };
 
 Mod.prototype.request = function() {
     if (this.hasRequested || this._loadjs._rootMod.getModByReqCache(this.path))
-        return;
+        return false;
     this.hasRequested = true;
     this._loadjs.emit(this._loadjs.EVENT.MOD_REQUESTED, this);
     var self = this;
@@ -126,17 +132,20 @@ Mod.prototype.request = function() {
         document.body.removeChild(scriptElem);
         var shim = self.shim;
         if (shim) {
-            self.status = Mod.status.loadedAllDeps;
-            self.hasExecutedCb = true;
-            self.exports = typeof shim === 'function' ? shim() : window[shim];
-            self._loadjs.emit(self._loadjs.EVENT.MOD_LOADED, self);
+            var cbFn =
+                typeof shim === 'function'
+                    ? shim
+                    : function() {
+                          return window[shim];
+                      };
+            self.checkDepsLoaded(cbFn);
         }
     };
     scriptElem.onerror = function(e) {};
     scriptElem.src = this.path;
     scriptElem.setAttribute('crossorigin', 'anonymous');
     document.body.appendChild(scriptElem);
-    return this;
+    return true;
 };
 
 Mod.status = {
