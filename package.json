@@ -2,7 +2,7 @@
   "name": "amdjs",
   "version": "1.0.1",
   "description": "Sample code to write JS module loader complies AMD",
-  "main": "bundle.js",
+  "main": "amdjs.js",
   "scripts": {
     "test": "echo \"test examples are in test folder.\"",
     "build": "browserify -r ./src/loadjs.js -t [ babelify ] -s amdjs | uglifyjs -c > ./amdjs.js",
