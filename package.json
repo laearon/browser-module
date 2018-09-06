@@ -1,6 +1,6 @@
 {
   "name": "amdjs",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "Sample code to write JS module loader complies AMD",
   "main": "amdjs.js",
   "scripts": {
@@ -9,6 +9,9 @@
     "dev": "browserify -r ./src/loadjs.js -t [ babelify ] -s amdjs -d > ./bundle.js",
     "start": "node scripts/dev.js"
   },
+  "files": [
+    "amdjs.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lcfme/browser-module.git"
